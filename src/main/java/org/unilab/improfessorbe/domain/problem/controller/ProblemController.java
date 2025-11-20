@@ -76,7 +76,7 @@ public class ProblemController {
 			throw new CustomException(ErrorCode.INSUFFICIENT_FREE_COUNT);
 		}
 
-		ProblemGenerationResponse result = problemService.createProblemWithAiPipeLine(userId, conceptFiles,
+		ProblemGenerationResponse result = problemService.createProblem(userId, conceptFiles,
 			formatFiles);
 
 		return ResponseEntity.ok(ApiResponse.success(result, result.getMessage()));
