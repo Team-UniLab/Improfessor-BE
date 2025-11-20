@@ -8,14 +8,14 @@ import lombok.Data;
 @Data
 @Builder
 public class ProblemGenerationResponse {
-	private String downloadKey;
+	private String fileName;
 	private List<ProblemResponse> problems;
 	private int problemCount;
 	private String message;
 
-	public static ProblemGenerationResponse of(String downloadKey, List<ProblemResponse> problems) {
+	public static ProblemGenerationResponse of(String fileName, List<ProblemResponse> problems) {
 		return ProblemGenerationResponse.builder()
-			.downloadKey(downloadKey)
+			.fileName(fileName)
 			.problems(problems)
 			.problemCount(problems.size())
 			.message("문제가 성공적으로 생성되었습니다.")

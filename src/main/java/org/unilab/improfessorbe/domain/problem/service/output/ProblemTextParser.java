@@ -11,7 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.stereotype.Component;
-import org.unilab.improfessorbe.domain.problem.domain.Problem;
+import org.unilab.improfessorbe.domain.problem.dto.ProblemResponse;
 import org.unilab.improfessorbe.global.exception.CustomException;
 import org.unilab.improfessorbe.global.exception.ErrorCode;
 import org.w3c.dom.Document;
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProblemTextParser {
 
-	public List<Problem> parseProblemText(String problemText) {
-		List<Problem> problems = new ArrayList<>();
+	public List<ProblemResponse> parseProblemText(String problemText) {
+		List<ProblemResponse> responses = new ArrayList<>();
 
 		try {
 			// 1. 기본 검증
@@ -66,8 +66,8 @@ public class ProblemTextParser {
 			// 6. 각 문제 파싱
 			for (int i = 0; i < problemNodes.getLength(); i++) {
 				Element problemElement = (Element)problemNodes.item(i);
-				Problem problem = parseSingleProblem(problemElement, i + 1);
-				problems.add(problem);
+				ProblemResponse problemResponse = parseSingleProblem(problemElement, i + 1);
+				responses.add(problemResponse);
 			}
 
 		} catch (CustomException e) {
@@ -85,8 +85,8 @@ public class ProblemTextParser {
 			throw new CustomException(ErrorCode.PROBLEM_CREATION_FAILED);
 		}
 
-		log.info("총 {}개의 문제가 파싱되었습니다.", problems.size());
-		return problems;
+		log.info("총 {}개의 문제가 파싱되었습니다.", responses.size());
+		return responses;
 	}
 
 	private String cleanProblemText(String problemText) {
@@ -124,17 +124,17 @@ public class ProblemTextParser {
 		}
 	}
 
-	private Problem parseSingleProblem(Element problemElement, int index) {
+	private ProblemResponse parseSingleProblem(Element problemElement, int index) {
 		try {
 			// 필수 필드 추출
-			String number = getElementText(problemElement, "number");
+			String type = getElementText(problemElement, "type");
 			String content = getElementText(problemElement, "content");
 			String description = getElementText(problemElement, "description");
 			String answer = getElementText(problemElement, "answer");
 
 			// 필수 필드 존재 검증
-			if (number == null || number.trim().isEmpty()) {
-				log.error("문제 {}에서 필수 필드 'number' 누락 또는 비어있음", index);
+			if (type == null || type.trim().isEmpty()) {
+				log.error("문제 {}에서 필수 필드 'type' 누락 또는 비어있음", index);
 				throw new CustomException(ErrorCode.PROBLEM_REQUIRED_FIELD_MISSING);
 			}
 
@@ -152,8 +152,8 @@ public class ProblemTextParser {
 				throw new CustomException(ErrorCode.PROBLEM_CONTENT_EMPTY);
 			}
 
-			return Problem.create(
-				"문제 " + number,
+			return ProblemResponse.of(
+				type.trim(),
 				content.trim(),
 				description.trim(),
 				answer.trim()

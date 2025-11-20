@@ -59,6 +59,7 @@ public enum ErrorCode {
 	PROBLEM_REQUIRED_FIELD_MISSING("P010", "생성된 문제의 필수 필드가 누락되었습니다.", HttpStatus.BAD_REQUEST),
 	PROBLEM_CONTENT_EMPTY("P011", "생성된 문제의 특정 필드의 내용이 비어있습니다.", HttpStatus.BAD_REQUEST),
 	PROBLEM_XML_PARSING_ERROR("P012", "생성된 문제의 XML 파싱에 실패했습니다.", HttpStatus.BAD_REQUEST),
+	PROBLEM_NOT_FOUND("P013", "문제를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
 	// Gemini
 	GEMINI_RATE_LIMIT_EXCEEDED("G001", "Gemini 분당 횟수 초과, 문제 생성을 잠시 후에 다시 시도해주세요.", HttpStatus.BAD_REQUEST),

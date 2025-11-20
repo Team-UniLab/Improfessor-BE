@@ -1,6 +1,5 @@
 package org.unilab.improfessorbe.domain.problem.infrastructure.external.ai;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.unilab.improfessorbe.domain.problem.domain.Problem;
 import org.unilab.improfessorbe.domain.problem.dto.ProblemResponse;
 import org.unilab.improfessorbe.domain.problem.service.output.ProblemTextParser;
 import org.unilab.improfessorbe.global.exception.CustomException;
@@ -87,12 +85,7 @@ public class AiService {
 			log.info("Successfully received response from AI server");
 
 			String problemText = response.getBody().getResult();
-			List<Problem> problems = problemTextParser.parseProblemText(problemText);
-
-			List<ProblemResponse> responses = new ArrayList<>();
-			for (Problem problem : problems) {
-				responses.add(ProblemResponse.of(problem));
-			}
+			List<ProblemResponse> responses = problemTextParser.parseProblemText(problemText);
 
 			return responses;
 
