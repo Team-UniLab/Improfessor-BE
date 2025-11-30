@@ -61,7 +61,9 @@ public class SecurityConfig {
 					"/api/users/email/send-verification",
 					"/api/users/email/verify", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health", "/oauth2/**",
 					"/login/oauth2/**", "/favicon.ico")
-				.permitAll() // 테스트용 잠시 "/api/test/public", "/index.html", "api/test/logout/success"
+				.permitAll()
+				.requestMatchers("/api/problems/**")
+				.permitAll()
 				.requestMatchers("/admin")
 				.hasRole("ADMIN")
 				.anyRequest()

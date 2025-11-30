@@ -46,7 +46,7 @@ public class ProblemService {
 	private final RoundService roundService;
 	private final ProblemRepository problemRepository;
 
-	public ProblemGenerationResponse createProblem(Long userId, List<MultipartFile> conceptFiles,
+	/*public ProblemGenerationResponse createProblem(Long userId, List<MultipartFile> conceptFiles,
 		List<MultipartFile> formatFiles) {
 		try {
 			// 1. 문제 생성
@@ -151,6 +151,83 @@ public class ProblemService {
 		} catch (CustomException e) {
 			throw e;
 		} catch (Exception e) {
+			throw new CustomException(ErrorCode.PROBLEM_CREATION_FAILED);
+		}
+	}*/
+
+	public ProblemGenerationResponse createProblemWithProgress(
+		Long userId,
+		List<MultipartFile> conceptFiles,
+		List<MultipartFile> formatFiles,
+		ProgressCallback callback) {
+
+		try {
+			// 0% - 시작
+			callback.onProgress("start", 0, "문제 생성을 시작합니다...");
+
+			// 1. 파일 파싱 (0% → 10%)
+			callback.onProgress("file_parsing", 5, "파일을 읽는 중...");
+
+			String conceptContent = fileParseService.parseFileList(conceptFiles, "개념");
+			String formatContent = "";
+			if (formatFiles != null) {
+				formatContent = fileParseService.parseFileList(formatFiles, "형식");
+			}
+
+			callback.onProgress("file_parsing", 10, "파일 읽기 완료!");
+			log.info("개념 파일 글자수: {}개 / 형식 파일 글자수: {}개",
+				conceptContent.length(), formatContent.length());
+
+			// 2. 개념 추출 (12% → 43%)
+			callback.onProgress("concept_extraction", 12, "중요 개념을 추출하는 중...");
+
+			ConceptExtractionResult result = conceptExtractorService.extractConcepts(conceptContent);
+			String conceptExtraction = result.toFormattedString();
+
+			callback.onProgress("concept_extraction", 43, "개념 추출 완료!");
+
+			// 3. 문제 생성 (43% → 89%)
+			callback.onProgress("problem_generation", 45, "AI가 문제를 생성하는 중...");
+
+			String problemText = geminiApiClient.generateProblems(conceptExtraction, formatContent);
+			List<ProblemResponse> responses = problemTextParser.parseProblemText(problemText);
+
+			callback.onProgress("problem_generation", 89, "문제 생성 완료!");
+
+			// 4. 저장 (89% → 100%)
+			callback.onProgress("saving", 95, "생성된 문제를 저장하는 중...");
+
+			String roundName = conceptFiles.get(0).getOriginalFilename() + '_' + LocalDateTime.now()
+				.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+
+			Round round = Round.create(userId, roundName);
+			roundService.save(round);
+
+			List<Problem> problems = responses.stream()
+				.map(response -> Problem.create(
+					round.getId(),
+					response.getType(),
+					response.getContent(),
+					response.getDescription(),
+					response.getAnswer()
+				))
+				.collect(toList());
+			problemRepository.saveAll(problems);
+
+			List<ProblemResponse> problemResponses = problems.stream()
+				.map(ProblemResponse::from)
+				.collect(toList());
+
+			userService.decrementFreeCount(userId);
+
+			callback.onProgress("saving", 100, "저장 완료!");
+
+			return ProblemGenerationResponse.of(roundName, problemResponses);
+
+		} catch (CustomException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("문제 생성 및 캐시 저장 중 에러", e);
 			throw new CustomException(ErrorCode.PROBLEM_CREATION_FAILED);
 		}
 	}
