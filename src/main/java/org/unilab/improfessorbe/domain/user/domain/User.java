@@ -82,7 +82,8 @@ public class User extends BaseEntity {
 		return new User(nickname, email, provider, providerId);
 	}
 
-	public void updateUser(String university, String major) {
+	public void updateUser(String nickname, String university, String major) {
+		this.nickname = nickname;
 		this.university = university;
 		this.major = major;
 	}

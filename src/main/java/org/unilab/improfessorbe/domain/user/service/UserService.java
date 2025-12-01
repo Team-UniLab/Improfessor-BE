@@ -158,6 +158,7 @@ public class UserService {
 
 		user.updateUser(
 			//encodedPassword,
+			userUpdateRequest.getNickname(),
 			userUpdateRequest.getUniversity(),
 			userUpdateRequest.getMajor()
 		);
