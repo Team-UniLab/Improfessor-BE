@@ -65,8 +65,12 @@ public class PdfFileParser implements FileParser { // 클래스 이름 변경 �
 			String ocrText = performOcr(document);
 			return textPreprocessor.preprocess(ocrText);*/
 
+		}catch (CustomException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("PDF 파일을 읽을 수 없습니다: " + e.getMessage(), e);
 		} catch (Exception e) {
-			throw new IOException("PDF/OCR processing failed: " + e.getMessage(), e);
+			throw new IOException("PDF 처리 중 예상치 못한 오류가 발생했습니다: " + e.getMessage(), e);
 		}
 	}
 

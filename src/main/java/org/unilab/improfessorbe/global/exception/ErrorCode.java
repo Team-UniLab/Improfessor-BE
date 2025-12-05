@@ -51,7 +51,7 @@ public enum ErrorCode {
 	FILE_TOO_LARGE("P003", "파일 크기가 너무 큽니다.", HttpStatus.BAD_REQUEST),
 	UNSUPPORTED_FILE_TYPE("P004", "지원하지 않는 파일 형식입니다.", HttpStatus.BAD_REQUEST),
 	EMPTY_FILE("P005", "업로드된 파일이 비어있습니다.", HttpStatus.BAD_REQUEST),
-	NO_EXTRACTABLE_TEXT("P006", "업로드하신 강의자료에서 텍스트를 추출할 수 없습니다.", HttpStatus.BAD_REQUEST),
+	NO_EXTRACTABLE_TEXT("P006", "업로드하신 PDF에서 텍스트를 추출할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
 	// Problem(생성된 문제 후처리 중 오류코드)
 	PROBLEM_TEXT_EMPTY("P006", "생성된 문제의 텍스트가 비어있습니다.", HttpStatus.BAD_REQUEST),
