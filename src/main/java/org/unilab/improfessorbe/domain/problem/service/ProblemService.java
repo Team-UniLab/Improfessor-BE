@@ -174,27 +174,27 @@ public class ProblemService {
 				formatContent = fileParseService.parseFileList(formatFiles, "형식");
 			}
 
-			callback.onProgress("file_parsing", 10, "파일 읽기 완료!");
+			callback.onProgress("file_parsing", 29, "파일 읽기 완료!");
 			log.info("개념 파일 글자수: {}개 / 형식 파일 글자수: {}개",
 				conceptContent.length(), formatContent.length());
 
-			// 2. 개념 추출 (12% → 43%)
-			callback.onProgress("concept_extraction", 12, "중요 개념을 추출하는 중...");
+			// 2. 개념 추출 (29% → 65%)
+			callback.onProgress("concept_extraction", 33, "중요 개념을 추출하는 중...");
 
 			ConceptExtractionResult result = conceptExtractorService.extractConcepts(conceptContent);
 			String conceptExtraction = result.toFormattedString();
 
-			callback.onProgress("concept_extraction", 43, "개념 추출 완료!");
+			callback.onProgress("concept_extraction", 65, "개념 추출 완료!");
 
-			// 3. 문제 생성 (43% → 89%)
-			callback.onProgress("problem_generation", 45, "AI가 문제를 생성하는 중...");
+			// 3. 문제 생성 (69% → 93%)
+			callback.onProgress("problem_generation", 69, "AI가 문제를 생성하는 중...");
 
 			String problemText = geminiApiClient.generateProblems(conceptExtraction, formatContent);
 			List<ProblemResponse> responses = problemTextParser.parseProblemText(problemText);
 
-			callback.onProgress("problem_generation", 89, "문제 생성 완료!");
+			callback.onProgress("problem_generation", 93, "문제 생성 완료!");
 
-			// 4. 저장 (89% → 100%)
+			// 4. 저장 (95% → 100%)
 			callback.onProgress("saving", 95, "생성된 문제를 저장하는 중...");
 
 			String roundName = conceptFiles.get(0).getOriginalFilename() + '_' + LocalDateTime.now()
