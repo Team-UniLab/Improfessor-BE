@@ -11,7 +11,10 @@ import org.unilab.improfessorbe.domain.problem.validator.FileValidator;
 import org.unilab.improfessorbe.global.exception.CustomException;
 import org.unilab.improfessorbe.global.exception.ErrorCode;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class FileParseService {
 
 	private final FileParserManager fileParserManager;
@@ -54,6 +57,8 @@ public class FileParseService {
 				parsedContent,
 				file.getSize()
 			);
+		} catch (CustomException e) {
+			throw e;
 		} catch (IOException e) {
 			throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
 		}
