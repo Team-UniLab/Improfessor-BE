@@ -39,6 +39,7 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.2.4'
     implementation 'org.apache.poi:poi-scratchpad:5.2.4'
     implementation 'org.apache.pdfbox:pdfbox:2.0.29'
+    implementation 'net.sourceforge.tess4j:tess4j:5.11.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
