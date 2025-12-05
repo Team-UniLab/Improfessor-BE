@@ -112,7 +112,7 @@ public class UserService {
 			log.error("login error: not valid password");
 			throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
 		} catch (Exception e) {
-			log.error("login error");
+			log.error("login error - external service failed: ", e);
 			throw new CustomException(ErrorCode.EXTERNAL_SERVICE_ERROR);
 		}
 	}
