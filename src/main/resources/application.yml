@@ -68,7 +68,7 @@ logging:
 gemini:
   api:
     key: ${GEMINI_API_KEY}
-    timeout: 30
+    timeout: 120
     base-url: https://generativelanguage.googleapis.com
 
 server:
