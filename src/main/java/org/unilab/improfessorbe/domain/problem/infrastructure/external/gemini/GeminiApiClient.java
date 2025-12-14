@@ -91,7 +91,7 @@ public class GeminiApiClient {
 
 		try {
 			GeminiDto.Response geminiResponse = geminiWebClient.post()
-				.uri("/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey)
+				.uri("/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.bodyValue(request)
 				.retrieve()
